@@ -1,7 +1,9 @@
 /*
 
 */
-
+resource "random_id" "names" {
+  byte_length = 8
+}
 resource "aws_instance" "web-tier" {
   count         = "${var.instance_count}"
   ami           = "${var.webtier-amiID}"
@@ -16,7 +18,7 @@ resource "aws_instance" "web-tier" {
 }
 
 resource "aws_security_group" "web-tier-sg" {
-  name        = "web-tier-security-group"
+  name        = "web-tier-security-group-${random_id.names.hex}"
   description = "Allow TLS inbound traffic"
   vpc_id      = "${var.vpc_id}"
 
@@ -47,7 +49,7 @@ resource "aws_security_group" "web-tier-sg" {
 }
 
 resource "aws_security_group" "app-tier-sg" {
-  name        = "app-tier-security-group"
+  name        = "app-tier-security-group-${random_id.names.hex}"
   description = "Allow TLS inbound traffic"
   vpc_id      = "${var.vpc_id}"
 
